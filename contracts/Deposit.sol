@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 // Compatible with OpenZeppelin Contracts ^5.0.0
+//current address 0x714f437284de11372c63736EDE77B230Aa5E04B1
 pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
@@ -45,10 +46,7 @@ contract SunDao is ERC20, ERC20Burnable, ERC20Pausable, AccessControl, ERC20Perm
     }
 
     function withdrawToSeller(uint256 amount, address seller) public onlyRole(DEFAULT_ADMIN_ROLE){
-        bool isApproveSuccess = stableToken.approve(msg.sender, amount);
-        require(isApproveSuccess, "Token approval failed");
-        bool isTransferSuccess = stableToken.transferFrom(address(this), seller, amount);
-        require(isTransferSuccess);
+        stableToken.transferFrom(address(this), seller, amount);
     }
 
 
