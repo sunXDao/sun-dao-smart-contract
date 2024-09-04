@@ -46,7 +46,7 @@ contract SunDao is ERC20, ERC20Burnable, ERC20Pausable, AccessControl, ERC20Perm
     }
 
     function withdrawToSeller(uint256 amount, address seller) public onlyRole(DEFAULT_ADMIN_ROLE){
-        stableToken.transferFrom(address(this), seller, amount);
+        stableToken.transfer(seller, amount);
     }
 
 
