@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 // Compatible with OpenZeppelin Contracts ^5.0.0
-//initial address 0xf53f27da838dc9d9dba474a08e1c6c8aa24d811e
-pragma solidity >=0.8.2 <0.9.0;
+pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
@@ -13,7 +12,7 @@ contract SunDao is ERC20, ERC20Burnable, ERC20Pausable, AccessControl, ERC20Perm
     mapping (address => uint256) public deposits;
     uint256 public totalDeposits;
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
-    IERC20 stableToken = IERC20(0x435bA31fEA5F67D915053ddCaeE187Dee1fC7ea8);
+    ERC20 stableToken = ERC20(0x435bA31fEA5F67D915053ddCaeE187Dee1fC7ea8);
 
     constructor(address defaultAdmin, address pauser)
         ERC20("SunDao", "SND")
@@ -32,20 +31,17 @@ contract SunDao is ERC20, ERC20Burnable, ERC20Pausable, AccessControl, ERC20Perm
     }
 
     function depositToMint(uint256 stableTokenAmount) public {
-        bool approveSuccess = stableToken.approve(address(this), stableTokenAmount);
-        require(approveSuccess, "approval failed");
-        bool transferSuccess = stableToken.transferFrom(msg.sender, address(this), stableTokenAmount);
-        require(transferSuccess, "transfer failed");
-
+        require(stableToken.transferFrom(msg.sender, address(this), stableTokenAmount));
 
         address to = msg.sender;
         uint256 amount = getMintAmount(stableTokenAmount);
-        
+            
 
         _mint(to, amount);
 
         deposits[msg.sender] += amount;
         totalDeposits += amount;
+
     }
 
     function withdrawToSeller(uint256 amount, address seller) public onlyRole(DEFAULT_ADMIN_ROLE){
