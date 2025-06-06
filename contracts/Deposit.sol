@@ -57,7 +57,7 @@ contract SunDao is ERC20, ERC20Burnable, ERC20Pausable, AccessControl, ERC20Perm
         if(totalDeposits == 0 && _totalSupply == 0){
             mintAmount = amount;
         } else{
-            uint mintRatio = totalDeposits / _totalSupply;
+            uint256 mintRatio = totalDeposits / _totalSupply;
             mintAmount = amount * mintRatio;
         }
         return mintAmount;
